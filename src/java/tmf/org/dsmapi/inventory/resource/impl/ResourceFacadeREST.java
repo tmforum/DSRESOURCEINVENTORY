@@ -57,8 +57,8 @@ public class ResourceFacadeREST {
     })
     @Produces({"application/json"})
     public Response findByCriteriaWithFields(
-            @ApiParam(value = "Query Specification", required = false) @PathParam("_s") String _s,
-            @ApiParam(value = "Field Specification", required = false) @PathParam("fields") String fields,
+            @ApiParam(value = "Query Specification", required = false) @QueryParam("_s") String _s,
+            @ApiParam(value = "Field Specification", required = false) @QueryParam("fields") String fields,
             @Context UriInfo info) throws BadUsageException {
 
         // search criteria
