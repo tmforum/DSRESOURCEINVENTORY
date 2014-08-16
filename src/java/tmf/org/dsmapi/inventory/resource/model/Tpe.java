@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeName;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
@@ -23,6 +24,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @Entity
 @DiscriminatorValue("tpe")
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonTypeName("tpe")
 //@JsonDeserialize(as=Tpe.class)

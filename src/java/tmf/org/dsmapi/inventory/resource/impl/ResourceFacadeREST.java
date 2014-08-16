@@ -18,11 +18,13 @@ import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -31,6 +33,7 @@ import org.codehaus.jackson.node.ObjectNode;
 import tmf.org.dsmapi.inventory.resource.model.Resource;
 import tmf.org.dsmapi.common.exceptions.BadUsageException;
 import tmf.org.dsmapi.common.impl.FacadeRestUtil;
+import tmf.org.dsmapi.inventory.resource.model.TopologicalLink;
 
 /**
  *
@@ -80,6 +83,36 @@ public class ResourceFacadeREST {
         return response;
     }
 
+    @HEAD
+    @ApiOperation(value = "Retrieve the HTTP Header", notes = "Retrieve the HTTP header that would have been returned by the coresponding GET.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 204, message = "No Data"),
+        @ApiResponse(code = 400, message = "Invalid Filter"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Produces({"application/json"})
+    public Response getHTTPHeaders(
+            @ApiParam(value = "Query Specification", required = false) @QueryParam("_s") String _s,
+            @ApiParam(value = "Field Specification", required = false) @QueryParam("fields") String fields,
+            @Context UriInfo info) throws BadUsageException {
+        // search criteria
+        MultivaluedMap<String, String> criteria = info.getQueryParameters();
+
+        List<Resource> resultList = findByCriteria(criteria);
+
+        Response response;
+        Response.ResponseBuilder responseBuilder = Response.noContent();
+        String start = new String();
+        if (resultList.size() == 0) {
+            start = "0";
+        } else {
+            start = "1";
+        }
+        responseBuilder.header("Content-Range", "items" + start + "-" + resultList.size() + "/" + manager.count());
+        response = responseBuilder.build();
+        return response;
+    }
+    
     private List<Resource> findByCriteria(MultivaluedMap<String, String> criteria) throws BadUsageException {
         List<Resource> resultList = null;
         if (criteria != null && !criteria.isEmpty()) {
@@ -88,20 +121,5 @@ public class ResourceFacadeREST {
             resultList = manager.findAll();
         }
         return resultList;
-    }
-
-    @GET
-    @Path("count")
-    @Produces("text/plain")
-    public String countREST() {
-        return String.valueOf(manager.count());
-    }
-
-    @GET
-    @Path("proto")
-    @Produces({"application/json"})
-    public Resource proto() {
-        Resource ps = new Resource();
-        return ps;
     }
 }

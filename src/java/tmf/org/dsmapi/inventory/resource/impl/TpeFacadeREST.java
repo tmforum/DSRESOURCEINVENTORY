@@ -30,6 +30,7 @@ import com.wordnik.swagger.annotations.*;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import tmf.org.dsmapi.common.model.JsonPatch;
 
 /**
  *
@@ -49,9 +50,9 @@ public class TpeFacadeREST {
     @GET
     @ApiOperation(value = "Retrieve TPEs", notes = "Retrieve TPEs using option filter.", response = Tpe.class)
     @ApiResponses(value = {
-    @ApiResponse(code = 200, message = "OK"),
-    @ApiResponse(code = 400, message = "Invalid Filter"), 
-    @ApiResponse(code = 500, message = "Internal Server Error") 
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 400, message = "Invalid Filter"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Produces({"application/json"})
     public Response findByCriteriaWithFields(
@@ -83,32 +84,32 @@ public class TpeFacadeREST {
     @POST
     @ApiOperation(value = "Create a TPE", notes = "Creates a TPE given the passed in representation.", response = Tpe.class)
     @ApiResponses(value = {
-    @ApiResponse(code = 201, message = "Created"), 
-    @ApiResponse(code = 500, message = "Internal Server Error") 
+        @ApiResponse(code = 201, message = "Created"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(
-            Tpe entity, 
+            @ApiParam(value = "TPE to be created.", required = true) Tpe entity,
             @Context UriInfo uriInfo) {
         entity.setType(entity.getClass().getSimpleName());
         entity.setId(null);
         manager.create(entity);
-        entity.setSelf(uriInfo.getAbsolutePath().toString()+"/"+entity.getId());
+        entity.setSelf(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
         entity.setId(entity.getId());
         Response response = Response.ok(entity).build();
         return response;
     }
-        
+
     @HEAD
     @ApiOperation(value = "Retrieve the HTTP Header", notes = "Retrieve the HTTP header that would have been returned by the coresponding GET.")
     @ApiResponses(value = {
-    @ApiResponse(code = 204, message = "No Data"),
-    @ApiResponse(code = 400, message = "Invalid Filter"), 
-    @ApiResponse(code = 500, message = "Internal Server Error") 
+        @ApiResponse(code = 204, message = "No Data"),
+        @ApiResponse(code = 400, message = "Invalid Filter"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Produces({"application/json"})
-    public Response getHTTPHeaders(
+    public Response getHTTPHeadersForList(
             @ApiParam(value = "Query Specification", required = false) @QueryParam("_s") String _s,
             @ApiParam(value = "Field Specification", required = false) @QueryParam("fields") String fields,
             @Context UriInfo info) throws BadUsageException {
@@ -118,12 +119,13 @@ public class TpeFacadeREST {
         List<Tpe> resultList = findByCriteria(criteria);
 
         Response response;
-        ResponseBuilder responseBuilder =  Response.noContent();
+        ResponseBuilder responseBuilder = Response.noContent();
         String start = new String();
-        if (resultList.size() == 0)
+        if (resultList.size() == 0) {
             start = "0";
-        else
+        } else {
             start = "1";
+        }
         responseBuilder.header("Content-Range", "items " + start + "-" + resultList.size() + "/" + manager.count());
         response = responseBuilder.build();
         return response;
@@ -132,14 +134,14 @@ public class TpeFacadeREST {
     @GET
     @ApiOperation(value = "Retrieve a TPE by ID", notes = "Retrieves a specific TPE by ID.", response = Tpe.class)
     @ApiResponses(value = {
-    @ApiResponse(code = 200, message = "OK"),
-    @ApiResponse(code = 404, message = "Not found"),
-    @ApiResponse(code = 500, message = "Internal Server Error") 
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 404, message = "Not found"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/{id}")
     @Produces({"application/json"})
     public Response findWithFields(
-            @ApiParam(value = "TPE ID", required = true) @PathParam("id") String id, 
+            @ApiParam(value = "TPE ID", required = true) @PathParam("id") String id,
             @ApiParam(value = "Field Specification", required = false) @QueryParam("fields") String fields,
             @Context UriInfo info) {
         // fields to filter view
@@ -164,16 +166,17 @@ public class TpeFacadeREST {
         return response;
     }
 
-    @PATCH    
+    @PATCH
     @ApiOperation(value = "Modify a TPE", notes = "Modify the specified TPE.", response = Tpe.class, httpMethod = "PATCH")
     @ApiResponses(value = {
-    @ApiResponse(code = 200, message = "OK"), 
-    @ApiResponse(code = 500, message = "Internal Server Error") 
-    })    
+        @ApiResponse(code = 200, message = "OK"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @Path("/{id}")
     @Consumes({"application/json+patch"})
     @Produces({"application/json"})
-    public Response edit(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
+    public Response edit(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id,
+    JsonPatch patch) {
         Response response = null;
         Tpe entity = manager.find(id);
         if (entity != null) {
@@ -185,20 +188,20 @@ public class TpeFacadeREST {
             response = Response.status(404).build();
         }
         return response;
-        }
-    
+    }
+
     @DELETE
     @ApiOperation(value = "Delete the specified TPE", notes = "Delete the specified TPE")
     @ApiResponses(value = {
-    @ApiResponse(code = 204, message = "No Content"),
-    @ApiResponse(code = 404, message = "Not found"),
-    @ApiResponse(code = 500, message = "Internal Server Error") 
-    })     
+        @ApiResponse(code = 204, message = "No Content"),
+        @ApiResponse(code = 404, message = "Not found"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
     @Path("/{id}")
     public void remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
         manager.remove(manager.find(id));
     }
-    
+
     private List<Tpe> findByCriteria(MultivaluedMap<String, String> criteria) throws BadUsageException {
         List<Tpe> resultList = null;
         if (criteria != null && !criteria.isEmpty()) {
@@ -207,5 +210,37 @@ public class TpeFacadeREST {
             resultList = manager.findAll();
         }
         return resultList;
+    }
+
+    @HEAD
+    @ApiOperation(value = "Retrieve the HTTP Header", notes = "Retrieve the HTTP header that would have been returned by the coresponding GET.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 204, message = "No Data"),
+        @ApiResponse(code = 400, message = "Invalid Filter"),
+        @ApiResponse(code = 404, message = "Not found"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Path("/{id}")
+    @Produces({"application/json"})
+    public Response getHTTPHeadersForInstance(
+            @ApiParam(value = "Query Specification", required = false) @QueryParam("_s") String _s,
+            @ApiParam(value = "Field Specification", required = false) @QueryParam("fields") String fields,
+            @Context UriInfo info) throws BadUsageException {
+        // search criteria
+        MultivaluedMap<String, String> criteria = info.getQueryParameters();
+
+        List<Tpe> resultList = findByCriteria(criteria);
+
+        Response response;
+        ResponseBuilder responseBuilder = Response.noContent();
+        String start = new String();
+        if (resultList.size() == 0) {
+            start = "0";
+        } else {
+            start = "1";
+        }
+        responseBuilder.header("Content-Range", "items " + start + "-" + resultList.size() + "/" + manager.count());
+        response = responseBuilder.build();
+        return response;
     }
 }
