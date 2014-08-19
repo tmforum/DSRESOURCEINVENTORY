@@ -24,28 +24,15 @@ import tmf.org.dsmapi.common.model.Href;
 @DiscriminatorValue("topologicalLink")
 @XmlRootElement
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonTypeName("topologicalLink")
+//@JsonTypeName("topologicalLink")
 // @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public class TopologicalLink extends Resource {
 
     private Href[] tp;
+    //private Href zEnd;
     
     private String[] layerProtocalName;
     //private Direction direction;
-
-    /**
-     * @return the tp
-     */
-    public Href[] getTp() {
-        return tp;
-    }
-
-    /**
-     * @param tp the tp to set
-     */
-    public void setTp(Href[] tp) {
-        this.setTp(tp);
-    }
 
     /**
      * @return the layerProtocalName
@@ -61,4 +48,17 @@ public class TopologicalLink extends Resource {
         this.setLayerProtocalName(layerProtocalName);
     }
 
+    /**
+     * @return the tpe
+     */
+    public Href[] getTp() {
+        return tp;
+    }
+
+    /**
+     * @param tpe the tpe to set
+     */
+    public void setTp(Href[] tpe) {
+        this.tp = tpe;
+    }
 }

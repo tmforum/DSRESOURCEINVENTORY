@@ -24,9 +24,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @Entity
 @DiscriminatorValue("tpe")
 @XmlRootElement
-@JsonIgnoreProperties(ignoreUnknown=true)
+//@JsonIgnoreProperties(ignoreUnknown=true)
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-@JsonTypeName("tpe")
+//@JsonTypeName("tpe")
 //@JsonDeserialize(as=Tpe.class)
  //@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 public class Tpe extends Resource {

@@ -236,8 +236,15 @@ public class TopologicalLinkFacadeREST {
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/{id}")
-    public void remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
-        manager.remove(manager.find(id));
+    public Response remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
+        Response response = null;
+       try {
+            manager.remove(manager.find(id));
+            response = Response.noContent().build();
+        } catch (Exception ex) {
+            response = Response.status(404).build();            
+        }
+        return response;
     }
 
     /**
@@ -254,15 +261,15 @@ public class TopologicalLinkFacadeREST {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     @Path("{id}/graph")
-    public Response createGraph(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id,
+    public Response createGraph(@ApiParam(value = "Topological Link ID", required = true) @PathParam("id") String id,
     @ApiParam(value = "The definition of the graph to be created.", required = true) GraphTask graphTask) {
         TopologicalLink p = manager.find(id);
         Graph entity = new Graph();
         entity.assoication = new Graph.Assoication[p.getTp().length];
         for (int count = 0; count < p.getTp().length; count++) {
-            entity.assoication[count] = entity.new Assoication();
+           entity.assoication[count] = entity.new Assoication();
             entity.assoication[count].name = "endpoint";
-            entity.assoication[count].role = p.getTp()[count].getRole();
+         //   entity.assoication[count].role = p.getTp()[count].getRole();
             entity.assoication[count].aEnd = "http://localhost:8080/DSResourceInventory/webresources/inventory/resource/topologicalLink/" + id;
             entity.assoication[count].zEnd = p.getTp()[count].getHref();
         }

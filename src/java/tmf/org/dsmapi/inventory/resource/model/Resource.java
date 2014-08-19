@@ -32,13 +32,14 @@ import tmf.org.dsmapi.common.model.ExplicitNameValuePair;
 //    use = JsonTypeInfo.Id.NAME,
 //    include = JsonTypeInfo.As.PROPERTY,
 //    property = "type")
-@JsonSubTypes({
-    @Type(value = TopologicalLink.class, name = "topologicalLink"),
-    @Type(value = Tpe.class, name = "tpe") })
+//@JsonSubTypes({
+//    @Type(value = TopologicalLink.class, name = "topologicalLink"),
+//    @Type(value = Tpe.class, name = "tpe") })
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @Entity
 @Inheritance
-@DiscriminatorColumn(name="type")
+//@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name="RESOURCE_TYPE")
 public class Resource implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

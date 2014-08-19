@@ -198,8 +198,15 @@ public class TpeFacadeREST {
         @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @Path("/{id}")
-    public void remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
-        manager.remove(manager.find(id));
+    public Response remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
+        Response response = null;
+       try {
+            manager.remove(manager.find(id));
+            response = Response.noContent().build();
+        } catch (Exception ex) {
+            response = Response.status(404).build();            
+        }
+        return response;
     }
 
     private List<Tpe> findByCriteria(MultivaluedMap<String, String> criteria) throws BadUsageException {
