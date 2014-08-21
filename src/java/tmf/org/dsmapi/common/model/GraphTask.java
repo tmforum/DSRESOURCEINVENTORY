@@ -9,7 +9,7 @@ package tmf.org.dsmapi.common.model;
  * @author jmorey
  */
 public class GraphTask {
-    private String associationName;
+    private String[] associationName;
     private String[] field;
     private String zendhref;
     private int depth;
@@ -17,14 +17,14 @@ public class GraphTask {
     /**
      * @return the associationName
      */
-    public String getAssociationName() {
+    public String[] getAssociationName() {
         return associationName;
     }
 
     /**
      * @param associationName the associationName to set
      */
-    public void setAssociationName(String associationName) {
+    public void setAssociationName(String[] associationName) {
         this.associationName = associationName;
     }
 

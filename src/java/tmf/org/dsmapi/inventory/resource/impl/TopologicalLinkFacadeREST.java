@@ -9,6 +9,8 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.annotations.ApiResponse;
 import com.wordnik.swagger.annotations.ApiResponses;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +40,7 @@ import tmf.org.dsmapi.common.impl.PATCH;
 import tmf.org.dsmapi.common.model.Assoication;
 import tmf.org.dsmapi.common.model.Graph;
 import tmf.org.dsmapi.common.model.GraphTask;
+import tmf.org.dsmapi.common.model.Href;
 import tmf.org.dsmapi.common.model.JsonPatch;
 import tmf.org.dsmapi.inventory.resource.model.Resource;
 import tmf.org.dsmapi.inventory.resource.model.Tpe;
@@ -109,7 +112,7 @@ public class TopologicalLinkFacadeREST {
             @ApiParam(value = "The topological link to be created.", required = true) TopologicalLink entity, @Context UriInfo uriInfo) {
         //jmentity.setId(null);
         manager.create(entity);
-        entity.setSelf(uriInfo.getAbsolutePath().toString()+"/"+entity.getId());
+        entity.setSelf(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
         //jmentity.setId(entity.getId());
         Response response = Response.ok(entity).build();
         return response;
@@ -190,7 +193,7 @@ public class TopologicalLinkFacadeREST {
     @Consumes({"application/json+patch"})
     @Produces({"application/json"})
     public Response jsonPatch(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id,
-    @ApiParam(value = "The JSON Patch spec of the mofidications to be made.", required = true) JsonPatch jsonPatch) {
+            @ApiParam(value = "The JSON Patch spec of the mofidications to be made.", required = true) JsonPatch jsonPatch) {
         Response response = null;
         TopologicalLink entity = manager.find(id);
         if (entity != null) {
@@ -214,7 +217,7 @@ public class TopologicalLinkFacadeREST {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response patch(@ApiParam(value = "T", required = true) @PathParam("id") String id,
-    @ApiParam(value = "The atributes of the object that need changed.", required = true) TopologicalLink topologicalLink) {
+            @ApiParam(value = "The atributes of the object that need changed.", required = true) TopologicalLink topologicalLink) {
         Response response = null;
         TopologicalLink entity = manager.find(id);
         if (entity != null) {
@@ -227,7 +230,7 @@ public class TopologicalLinkFacadeREST {
         }
         return response;
     }
-        
+
     @DELETE
     @ApiOperation(value = "Delete the specified topological link.", notes = "Delete the specified topological link.")
     @ApiResponses(value = {
@@ -238,11 +241,11 @@ public class TopologicalLinkFacadeREST {
     @Path("/{id}")
     public Response remove(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id) {
         Response response = null;
-       try {
+        try {
             manager.remove(manager.find(id));
             response = Response.noContent().build();
         } catch (Exception ex) {
-            response = Response.status(404).build();            
+            response = Response.status(404).build();
         }
         return response;
     }
@@ -260,27 +263,62 @@ public class TopologicalLinkFacadeREST {
     })
     @Consumes({"application/json"})
     @Produces({"application/json"})
-    @Path("{id}/graph")
+    @Path("/{id}/graph")
     public Response createGraph(@ApiParam(value = "Topological Link ID", required = true) @PathParam("id") String id,
-    @ApiParam(value = "The definition of the graph to be created.", required = true) GraphTask graphTask) {
+            @ApiParam(value = "The definition of the graph to be created.", required = true) GraphTask graphTask) {
+        Response response = null;
         TopologicalLink p = manager.find(id);
-        Graph entity = new Graph();
-        entity.assoication = new Graph.Assoication[p.getTp().length];
-        for (int count = 0; count < p.getTp().length; count++) {
-           entity.assoication[count] = entity.new Assoication();
-            entity.assoication[count].name = "endpoint";
-         //   entity.assoication[count].role = p.getTp()[count].getRole();
-            entity.assoication[count].aEnd = "http://localhost:8080/DSResourceInventory/webresources/inventory/resource/topologicalLink/" + id;
-            entity.assoication[count].zEnd = p.getTp()[count].getHref();
+        if (p == null) {
+            response = Response.status(404).build();
+        } else {
+            Field f = null;
+            Class<?> c = p.getClass();
+            Graph entity = new Graph();
+            for (int count = 0; count < graphTask.getAssociationName().length; count++) {
+                //try
+                {
+                    Href objects[] = null;
+                    try {
+                        String attributeName = graphTask.getAssociationName()[count];
+                        f = c.getDeclaredField(attributeName);
+                    } catch (Exception ex) {
+                        response = Response.status(Response.Status.BAD_REQUEST).build();
+                        return response;
+                    }
+                    f.setAccessible(true);
+                    entity.assoication = new Graph.Assoication[2];
+                    try {
+                        objects = Href[].class.cast(f.get(p));
+                    } catch (Exception ex) {
+                        response = Response.status(Response.Status.BAD_REQUEST).build();
+                        return response;
+                    }
+                    for (int icount = 0; icount < 2; icount++) {
+                        Href obj = (Href) objects[icount];
+                        entity.assoication[icount] = entity.new Assoication();
+                        entity.assoication[icount].name = graphTask.getAssociationName()[count];
+                        entity.assoication[icount].role = obj.getRole();
+                        entity.assoication[icount].aEnd = "http://localhost:8080/DSResourceInventory/webresources/inventory/resource/topologicalLink/" + id;
+                        entity.assoication[icount].zEnd = obj.getHref();
+                    }
+                } //catch (Exception ex) {
+                //    // throw client error here
+                //}
+
+            }
+
+           // entity.assoication = new Graph.Assoication[2];
+            entity.data = new Resource[3];
+            entity.data[0] = p;
+            for (int count = 0; count < entity.assoication.length; count++) {
+                String uri = entity.assoication[count].zEnd;
+                JsonRequest jsonRequest = new JsonRequest(uri, Tpe.class);
+                Tpe the_object = (Tpe) jsonRequest.getObject();
+                entity.data[count + 1] = the_object;
+            }
+            response = Response.ok(entity).build();
+
         }
-        entity.data = new Resource[p.getTp().length + 1];
-        entity.data[0] = p;
-        for (int count = 0; count < p.getTp().length; count++) {
-            JsonRequest jsonRequest = new JsonRequest(p.getTp()[count].getHref(), Tpe.class);
-            Tpe the_object = (Tpe) jsonRequest.getObject();
-            entity.data[count + 1] = the_object;
-        }
-        Response response = Response.ok(entity).build();
         return response;
     }
 
@@ -324,5 +362,25 @@ public class TopologicalLinkFacadeREST {
             resultList = manager.findAll();
         }
         return resultList;
+    }
+
+    public static Object[] unpack(final Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value.getClass().isArray()) {
+            if (value instanceof Object[]) {
+                return (Object[]) value;
+            } else // box primitive arrays
+            {
+                final Object[] boxedArray = new Object[Array.getLength(value)];
+                for (int index = 0; index < boxedArray.length; index++) {
+                    boxedArray[index] = Array.get(value, index); // automatic boxing
+                }
+                return boxedArray;
+            }
+        } else {
+            throw new IllegalArgumentException("Not an array");
+        }
     }
 }

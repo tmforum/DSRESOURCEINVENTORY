@@ -27,10 +27,18 @@ import tmf.org.dsmapi.common.exceptions.BadUsageException;
 import tmf.org.dsmapi.common.impl.FacadeRestUtil;
 import tmf.org.dsmapi.common.impl.PATCH;
 import com.wordnik.swagger.annotations.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import tmf.org.dsmapi.common.impl.JsonRequest;
+import tmf.org.dsmapi.common.model.Graph;
+import tmf.org.dsmapi.common.model.GraphTask;
+import tmf.org.dsmapi.common.model.Href;
 import tmf.org.dsmapi.common.model.JsonPatch;
+import tmf.org.dsmapi.inventory.resource.model.Resource;
+import tmf.org.dsmapi.inventory.resource.model.TopologicalLink;
 
 /**
  *
@@ -38,7 +46,7 @@ import tmf.org.dsmapi.common.model.JsonPatch;
  */
 @Stateless
 @Api(value = "/inventory/resource/tpe", description = "Used to retrieve and manage TPEs in inventory.")
-@Path("inventory/resource/tpe")
+@Path("/inventory/resource/tpe")
 public class TpeFacadeREST {
 
     @EJB
@@ -219,6 +227,78 @@ public class TpeFacadeREST {
         return resultList;
     }
 
+    /**
+     *
+     * @param entity
+     * @return
+     */
+    @POST
+    @ApiOperation(value = "Creates a request for a graph based on the idetified topological link.", notes = "Causes the creation of the specified graph.", response = Graph.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "Created"),
+        @ApiResponse(code = 500, message = "Internal Server Error")
+    })
+    @Consumes({"application/json"})
+    @Produces({"application/json"})
+    @Path("/{id}/graph")
+    public Response createGraph(@ApiParam(value = "Topological Link ID", required = true) @PathParam("id") String id,
+            @ApiParam(value = "The definition of the graph to be created.", required = true) GraphTask graphTask) {
+        Response response = null;
+        Tpe p = manager.find(id);
+        if (p == null) {
+            response = Response.status(404).build();
+        } else {
+            Field f = null;
+            Class<?> c = p.getClass();
+            Graph entity = new Graph();
+            for (int count = 0; count < graphTask.getAssociationName().length; count++) {
+                //try
+                {
+                    Href objects[] = null;
+                    try {
+                        String attributeName = graphTask.getAssociationName()[count];
+                        f = c.getDeclaredField(attributeName);
+                    } catch (Exception ex) {
+                        response = Response.status(Response.Status.BAD_REQUEST).build();
+                        return response;
+                    }
+                    f.setAccessible(true);
+                    entity.assoication = new Graph.Assoication[2];
+                    try {
+                        objects = Href[].class.cast(f.get(p));
+                    } catch (Exception ex) {
+                        response = Response.status(Response.Status.BAD_REQUEST).build();
+                        return response;
+                    }
+                    for (int icount = 0; icount < 2; icount++) {
+                        Href obj = (Href) objects[icount];
+                        entity.assoication[icount] = entity.new Assoication();
+                        entity.assoication[icount].name = graphTask.getAssociationName()[count];
+                        entity.assoication[icount].role = obj.getRole();
+                        entity.assoication[icount].aEnd = "http://localhost:8080/DSResourceInventory/webresources/inventory/resource/topologicalLink/" + id;
+                        entity.assoication[icount].zEnd = obj.getHref();
+                    }
+                } //catch (Exception ex) {
+                //    // throw client error here
+                //}
+
+            }
+
+           // entity.assoication = new Graph.Assoication[2];
+            entity.data = new Resource[3];
+            entity.data[0] = p;
+            for (int count = 0; count < entity.assoication.length; count++) {
+                String uri = entity.assoication[count].zEnd;
+                JsonRequest jsonRequest = new JsonRequest(uri, Tpe.class);
+                Tpe the_object = (Tpe) jsonRequest.getObject();
+                entity.data[count + 1] = the_object;
+            }
+            response = Response.ok(entity).build();
+
+        }
+        return response;
+    }
+    
     @HEAD
     @ApiOperation(value = "Retrieve the HTTP Header", notes = "Retrieve the HTTP header that would have been returned by the coresponding GET.")
     @ApiResponses(value = {
