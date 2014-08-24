@@ -44,19 +44,17 @@ public class Resource implements Serializable {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private String id;
-    protected String type;
+    private String type;
     private String name;
     private String description;
     private String lifeCycleState;
-    private String version;
     private boolean isBundle;
     private ExplicitNameValuePair[] alias;
-    private ExplicitNameValuePair[] extensionInfo;
     private ExplicitNameValuePair[] resourceCharacteristic;
     private Href[] resourceSpecification;
     private Assoication[] association;
     private Href[] bundle;
-    private String self;
+    private String href;
 
     public String getId() {
         return id;
@@ -123,20 +121,6 @@ public class Resource implements Serializable {
     }
 
     /**
-     * @return the version
-     */
-    public String getVersion() {
-        return version;
-    }
-
-    /**
-     * @param version the version to set
-     */
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    /**
      * @return the isBundle
      */
     public boolean isIsBundle() {
@@ -161,21 +145,7 @@ public class Resource implements Serializable {
      * @param aliasName the aliasName to set
      */
     public void setAliasName(ExplicitNameValuePair[] alias) {
-        this.alias = alias;
-    }
-
-    /**
-     * @return the extensionInfo
-     */
-    public ExplicitNameValuePair[] getExtensionInfo() {
-        return extensionInfo;
-    }
-
-    /**
-     * @param extensionInfo the extensionInfo to set
-     */
-    public void setExtensionInfo(ExplicitNameValuePair[] extensionInfo) {
-        this.extensionInfo = extensionInfo;
+        this.setAlias(alias);
     }
 
     /**
@@ -189,7 +159,7 @@ public class Resource implements Serializable {
      * @param resourceCharacteristic the resourceCharacteristic to set
      */
     public void setResourceCharacteristic(ExplicitNameValuePair[] resourceCharacteristic) {
-        this.resourceCharacteristic = resourceCharacteristic;
+        this.setResourceCharacteristic(resourceCharacteristic);
     }
 
     /**
@@ -203,7 +173,7 @@ public class Resource implements Serializable {
      * @param resourceSpecification the resourceSpecification to set
      */
     public void setResourceSpecification(Href[] resourceSpecification) {
-        this.resourceSpecification = resourceSpecification;
+        this.setResourceSpecification(resourceSpecification);
     }
 
     /**
@@ -217,7 +187,7 @@ public class Resource implements Serializable {
      * @param association the association to set
      */
     public void setAssociation(Assoication[] association) {
-        this.association = association;
+        this.setAssociation(association);
     }
 
     /**
@@ -231,21 +201,27 @@ public class Resource implements Serializable {
      * @param bundle the bundle to set
      */
     public void setBundle(Href[] bundle) {
-        this.bundle = bundle;
+        this.setBundle(bundle);
     }
 
     /**
-     * @return the self
+     * @return the href
      */
-    public String getSelf() {
-        return self;
+    public String getHref() {
+        return href;
     }
 
     /**
-     * @param self the self to set
+     * @param href the href to set
      */
-    public void setSelf(String self) {
-        this.self = self;
+    public void setHref(String href) {
+        this.href = href;
     }
 
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(ExplicitNameValuePair[] alias) {
+        this.alias = alias;
+    }
 }

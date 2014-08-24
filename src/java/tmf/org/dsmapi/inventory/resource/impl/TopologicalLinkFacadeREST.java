@@ -112,7 +112,7 @@ public class TopologicalLinkFacadeREST {
             @ApiParam(value = "The topological link to be created.", required = true) TopologicalLink entity, @Context UriInfo uriInfo) {
         //jmentity.setId(null);
         manager.create(entity);
-        entity.setSelf(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
+        entity.setHref(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
         //jmentity.setId(entity.getId());
         Response response = Response.ok(entity).build();
         return response;
@@ -274,12 +274,12 @@ public class TopologicalLinkFacadeREST {
             Field f = null;
             Class<?> c = p.getClass();
             Graph entity = new Graph();
-            for (int count = 0; count < graphTask.getAssociationName().length; count++) {
+            for (int count = 0; count < graphTask.getAssociationAndRole().length; count++) {
                 //try
                 {
                     Href objects[] = null;
                     try {
-                        String attributeName = graphTask.getAssociationName()[count];
+                        String attributeName = graphTask.getAssociationAndRole()[count].attribute;
                         f = c.getDeclaredField(attributeName);
                     } catch (Exception ex) {
                         response = Response.status(Response.Status.BAD_REQUEST).build();
@@ -296,7 +296,7 @@ public class TopologicalLinkFacadeREST {
                     for (int icount = 0; icount < 2; icount++) {
                         Href obj = (Href) objects[icount];
                         entity.assoication[icount] = entity.new Assoication();
-                        entity.assoication[icount].name = graphTask.getAssociationName()[count];
+                        entity.assoication[icount].name = graphTask.getAssociationAndRole()[count].attribute;
                         entity.assoication[icount].role = obj.getRole();
                         entity.assoication[icount].aEnd = "http://localhost:8080/DSResourceInventory/webresources/inventory/resource/topologicalLink/" + id;
                         entity.assoication[icount].zEnd = obj.getHref();

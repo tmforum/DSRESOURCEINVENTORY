@@ -1,6 +1,8 @@
 {
-   "associationName": [
-         "tp"
+    "associationAndRole": [
+        { 
+	    "tp": [] 
+	}
     ],
     "field":[],
     "zendhref":"",

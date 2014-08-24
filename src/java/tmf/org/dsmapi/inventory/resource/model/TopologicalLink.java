@@ -26,12 +26,15 @@ import tmf.org.dsmapi.common.model.Href;
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 //@JsonTypeName("topologicalLink")
 // @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public class TopologicalLink extends Resource {
+public class TopologicalLink extends LogicalResource {
 
-    private Href[] tp;
-    //private Href zEnd;
-    
     private String[] layerProtocalName;
+    private String direction;
+    private String[] ituArcStateAndStatusList;
+    private String isAlarmReporting;
+    private Href[] tp;
+    private String asap;
+
     //private Direction direction;
 
     /**
@@ -59,6 +62,62 @@ public class TopologicalLink extends Resource {
      * @param tpe the tpe to set
      */
     public void setTp(Href[] tpe) {
-        this.tp = tpe;
+        this.setTp(tpe);
+    }
+
+    /**
+     * @return the direction
+     */
+    public String getDirection() {
+        return direction;
+    }
+
+    /**
+     * @param direction the direction to set
+     */
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    /**
+     * @return the ituArcStateAndStatusList
+     */
+    public String[] getItuArcStateAndStatusList() {
+        return ituArcStateAndStatusList;
+    }
+
+    /**
+     * @param ituArcStateAndStatusList the ituArcStateAndStatusList to set
+     */
+    public void setItuArcStateAndStatusList(String[] ituArcStateAndStatusList) {
+        this.ituArcStateAndStatusList = ituArcStateAndStatusList;
+    }
+
+    /**
+     * @return the isAlarmReporting
+     */
+    public String getIsAlarmReporting() {
+        return isAlarmReporting;
+    }
+
+    /**
+     * @param isAlarmReporting the isAlarmReporting to set
+     */
+    public void setIsAlarmReporting(String isAlarmReporting) {
+        this.isAlarmReporting = isAlarmReporting;
+    }
+
+    /**
+     * @return the asap
+     */
+    public String getAsap() {
+        return asap;
+    }
+
+    /**
+     * @param asap the asap to set
+     */
+    public void setAsap(String asap) {
+        this.asap = asap;
     }
 }

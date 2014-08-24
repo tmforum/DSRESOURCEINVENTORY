@@ -34,6 +34,7 @@ public class ApplicationConfig extends Application {
         Set<Class<?>> resources = new java.util.HashSet<Class<?>>();
         resources.add(tmf.org.dsmapi.common.impl.BadUsageExceptionMapper.class);
         resources.add(tmf.org.dsmapi.common.impl.JacksonConfigurator.class);
+        resources.add(tmf.org.dsmapi.inventory.resource.impl.EquipmentFacadeREST.class);
         resources.add(tmf.org.dsmapi.inventory.resource.impl.ResourceFacadeREST.class);
         resources.add(tmf.org.dsmapi.inventory.resource.impl.TopologicalLinkFacadeREST.class);
         resources.add(tmf.org.dsmapi.inventory.resource.impl.TpeFacadeREST.class);

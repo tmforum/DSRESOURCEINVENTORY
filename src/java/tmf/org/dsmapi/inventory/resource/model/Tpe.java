@@ -29,7 +29,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 //@JsonTypeName("tpe")
 //@JsonDeserialize(as=Tpe.class)
  //@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public class Tpe extends Resource {
+public class Tpe extends LogicalResource {
 
     private String tpeName;
 
