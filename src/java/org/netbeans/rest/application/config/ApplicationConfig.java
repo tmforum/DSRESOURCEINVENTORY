@@ -6,8 +6,8 @@ package org.netbeans.rest.application.config;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
-import tmf.org.dsmapi.common.impl.BadUsageExceptionMapper;
-import tmf.org.dsmapi.common.impl.JacksonConfigurator;
+import org.tmf.dsmapi.common.impl.BadUsageExceptionMapper;
+import org.tmf.dsmapi.common.impl.JacksonConfigurator;
 
 /**
  *
@@ -32,12 +32,12 @@ public class ApplicationConfig extends Application {
      */
     private Set<Class<?>> getRestResourceClasses() {
         Set<Class<?>> resources = new java.util.HashSet<Class<?>>();
-        resources.add(tmf.org.dsmapi.common.impl.BadUsageExceptionMapper.class);
-        resources.add(tmf.org.dsmapi.common.impl.JacksonConfigurator.class);
-        resources.add(tmf.org.dsmapi.inventory.resource.impl.EquipmentFacadeREST.class);
-        resources.add(tmf.org.dsmapi.inventory.resource.impl.ResourceFacadeREST.class);
-        resources.add(tmf.org.dsmapi.inventory.resource.impl.TopologicalLinkFacadeREST.class);
-        resources.add(tmf.org.dsmapi.inventory.resource.impl.TpeFacadeREST.class);
+        resources.add(org.tmf.dsmapi.common.impl.BadUsageExceptionMapper.class);
+        resources.add(org.tmf.dsmapi.common.impl.JacksonConfigurator.class);
+        resources.add(org.tmf.dsmapi.inventory.resource.impl.EquipmentFacadeREST.class);
+        resources.add(org.tmf.dsmapi.inventory.resource.impl.ResourceFacadeREST.class);
+        resources.add(org.tmf.dsmapi.inventory.resource.impl.TopologicalLinkFacadeREST.class);
+        resources.add(org.tmf.dsmapi.inventory.resource.impl.TpeFacadeREST.class);
         // following code can be used to customize Jersey 1.x JSON provider:
         try {
             Class jacksonProvider = Class.forName("org.codehaus.jackson.jaxrs.JacksonJsonProvider");

@@ -1,0 +1,18 @@
+{
+  "protectionSchemeState": "",
+  "protectionRole": "",
+  "isReportingAlarms": true,
+  "installedVersion": "1.24544.3",
+  "installedSerialNumber": "98234982938479",
+  "installedPartNumber": "662524",
+  "installedEquipmentType": "Shelf",
+  "expectedEquipmentType": "Shelf",
+  "location": "A-1",
+  "manufacture": "Acme",
+  "manufactureDate": "2014-2-37",
+  "name": "",
+  "type": "equipment",
+  "description": "",
+  "lifeCycleState": "",
+  "isBundle": false
+}

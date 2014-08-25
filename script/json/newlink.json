@@ -1,15 +1,15 @@
 {
-"type":"topologicalLink",
-"tp" : [
-{
-"role":"AEND",
-"href":"http://localhost:8080/DSResourceInventory/webresources/inventory/resource/tpe/1"
-},
-{
-"role":"ZEND",
-"href":"http://localhost:8080/DSResourceInventory/webresources/inventory/resource/tpe/2"
-}
-]
+    "type":"topologicalLink",
+    "tp" : [
+        {
+            "role":"AEND",
+            "href":"http://localhost:8080/DSResourceInventory/webresources/inventory/resource/tpe/1"
+        },
+        {
+            "role":"ZEND",
+            "href":"http://localhost:8080/DSResourceInventory/webresources/inventory/resource/tpe/2"
+        }
+    ]
 }
 
 
