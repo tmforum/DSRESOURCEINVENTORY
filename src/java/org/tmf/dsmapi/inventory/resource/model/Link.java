@@ -27,7 +27,7 @@ import org.tmf.dsmapi.common.model.Href;
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 //@JsonTypeName("topologicalLink")
 // @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-public class TopologicalLink extends LogicalResource {
+public class Link extends LogicalResource {
 
     private String[] layerProtocalName;
     private String direction;

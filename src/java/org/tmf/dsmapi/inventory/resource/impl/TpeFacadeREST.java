@@ -38,7 +38,7 @@ import org.tmf.dsmapi.common.model.GraphTask;
 import org.tmf.dsmapi.common.model.Href;
 import org.tmf.dsmapi.common.model.JsonPatch;
 import org.tmf.dsmapi.inventory.resource.model.Resource;
-import org.tmf.dsmapi.inventory.resource.model.TopologicalLink;
+import org.tmf.dsmapi.inventory.resource.model.Link;
 
 /**
  *
@@ -71,7 +71,18 @@ public class TpeFacadeREST {
         MultivaluedMap<String, String> criteria = info.getQueryParameters();
         // fields to filter view
         Set<String> fieldSet = FacadeRestUtil.getFieldSet(criteria);
-
+        if (criteria.containsKey("_s"))
+        {
+            String[] stuff = criteria.getFirst("_s").split("=");
+            String query = new String("");
+            for (int count = 1;count<stuff.length;count++)
+            {
+                query += "=";
+                query += stuff[count];
+            }
+            criteria.clear();
+            criteria.add(stuff[0],query);
+        }
         List<Tpe> resultList = findByCriteria(criteria);
 
         Response response;

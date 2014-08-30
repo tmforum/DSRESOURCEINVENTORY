@@ -8,19 +8,19 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.tmf.dsmapi.common.impl.AbstractFacade;
-import org.tmf.dsmapi.inventory.resource.model.TopologicalLink;
+import org.tmf.dsmapi.inventory.resource.model.Link;
 
 /**
  *
  * @author pierregauthier
  */
 @Stateless
-public class TopologicalLinkFacade extends AbstractFacade<TopologicalLink> {
+public class LinkFacade extends AbstractFacade<Link> {
     @PersistenceContext(unitName = "DSResourceInventoryPU")
     private EntityManager em;
 
-    public TopologicalLinkFacade() {
-        super(TopologicalLink.class);
+    public LinkFacade() {
+        super(Link.class);
     }
 
     @Override

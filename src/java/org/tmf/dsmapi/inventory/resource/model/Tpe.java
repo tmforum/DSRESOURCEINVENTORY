@@ -36,7 +36,7 @@ public class Tpe extends LogicalResource {
     private Boolean isEquipmentProtected;
     private String egressTmdState;
     private String ingressTmdState;
-    private Href[] supportingEquipment;
+    private Href[] containedEquipment;
 
 
     /**
@@ -99,14 +99,14 @@ public class Tpe extends LogicalResource {
      * @return the supportingEquipment
      */
     public Href[] getSupportingEquipment() {
-        return supportingEquipment;
+        return containedEquipment;
     }
 
     /**
      * @param supportingEquipment the supportingEquipment to set
      */
     public void setSupportingEquipment(Href[] supportingEquipment) {
-        this.supportingEquipment = supportingEquipment;
+        this.containedEquipment = supportingEquipment;
     }
 
 }

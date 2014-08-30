@@ -33,7 +33,7 @@ import org.codehaus.jackson.node.ObjectNode;
 import org.tmf.dsmapi.inventory.resource.model.Resource;
 import org.tmf.dsmapi.common.exceptions.BadUsageException;
 import org.tmf.dsmapi.common.impl.FacadeRestUtil;
-import org.tmf.dsmapi.inventory.resource.model.TopologicalLink;
+import org.tmf.dsmapi.inventory.resource.model.Link;
 
 /**
  *
@@ -65,7 +65,18 @@ public class ResourceFacadeREST {
         MultivaluedMap<String, String> criteria = info.getQueryParameters();
         // fields to filter view
         Set<String> fieldSet = FacadeRestUtil.getFieldSet(criteria);
-
+        if (criteria.containsKey("_s"))
+        {
+            String[] stuff = criteria.getFirst("_s").split("=");
+            String query = new String("");
+            for (int count = 1;count<stuff.length;count++)
+            {
+                query += "=";
+                query += stuff[count];
+            }
+            criteria.clear();
+            criteria.add(stuff[0],query);
+        }
         List<Resource> resultList = findByCriteria(criteria);
 
         Response response;

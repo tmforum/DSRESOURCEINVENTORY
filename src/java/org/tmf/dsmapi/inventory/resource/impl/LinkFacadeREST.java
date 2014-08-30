@@ -32,7 +32,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.codehaus.jackson.node.ObjectNode;
-import org.tmf.dsmapi.inventory.resource.model.TopologicalLink;
+import org.tmf.dsmapi.inventory.resource.model.Link;
 import org.tmf.dsmapi.common.exceptions.BadUsageException;
 import org.tmf.dsmapi.common.impl.FacadeRestUtil;
 import org.tmf.dsmapi.common.impl.JsonRequest;
@@ -52,16 +52,16 @@ import org.tmf.dsmapi.inventory.resource.model.Tpe;
 @Stateless
 @Api(value = "/inventory/resource/topologicalLink", description = "Used to retrieve and manage topological links s in inventory.")
 @Path("/inventory/resource/topologicalLink")
-public class TopologicalLinkFacadeREST {
+public class LinkFacadeREST {
 
     @EJB
-    private TopologicalLinkFacade manager;
+    private LinkFacade manager;
 
-    public TopologicalLinkFacadeREST() {
+    public LinkFacadeREST() {
     }
 
     @GET
-    @ApiOperation(value = "Retrieve Topological Links", notes = "Retrieve Topological Links using option filter.", response = TopologicalLink.class)
+    @ApiOperation(value = "Retrieve Topological Links", notes = "Retrieve Topological Links using option filter.", response = Link.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Invalid Filter"),
@@ -77,8 +77,19 @@ public class TopologicalLinkFacadeREST {
         MultivaluedMap<String, String> criteria = info.getQueryParameters();
         // fields to filter view
         Set<String> fieldSet = FacadeRestUtil.getFieldSet(criteria);
-
-        List<TopologicalLink> resultList = findByCriteria(criteria);
+        if (criteria.containsKey("_s"))
+        {
+            String[] stuff = criteria.getFirst("_s").split("=");
+            String query = new String("");
+            for (int count = 1;count<stuff.length;count++)
+            {
+                query += "=";
+                query += stuff[count];
+            }
+            criteria.clear();
+            criteria.add(stuff[0],query);
+        }
+        List<Link> resultList = findByCriteria(criteria);
 
         Response response;
         if (fieldSet.isEmpty() || fieldSet.contains(FacadeRestUtil.ALL_FIELDS)) {
@@ -86,7 +97,7 @@ public class TopologicalLinkFacadeREST {
         } else {
             fieldSet.add(FacadeRestUtil.ID_FIELD);
             List<ObjectNode> nodeList = new ArrayList<ObjectNode>();
-            for (TopologicalLink productOffering : resultList) {
+            for (Link productOffering : resultList) {
                 ObjectNode node = FacadeRestUtil.createNodeViewWithFields(productOffering, fieldSet);
                 nodeList.add(node);
             }
@@ -101,7 +112,7 @@ public class TopologicalLinkFacadeREST {
      * @return
      */
     @POST
-    @ApiOperation(value = "Create a Topological Link", notes = "Creates a topological link given the passed in representation.", response = TopologicalLink.class)
+    @ApiOperation(value = "Create a Topological Link", notes = "Creates a topological link given the passed in representation.", response = Link.class)
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "Created"),
         @ApiResponse(code = 500, message = "Internal Server Error")
@@ -109,7 +120,7 @@ public class TopologicalLinkFacadeREST {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(
-            @ApiParam(value = "The topological link to be created.", required = true) TopologicalLink entity, @Context UriInfo uriInfo) {
+            @ApiParam(value = "The topological link to be created.", required = true) Link entity, @Context UriInfo uriInfo) {
         //jmentity.setId(null);
         manager.create(entity);
         entity.setHref(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
@@ -133,7 +144,7 @@ public class TopologicalLinkFacadeREST {
         // search criteria
         MultivaluedMap<String, String> criteria = info.getQueryParameters();
 
-        List<TopologicalLink> resultList = findByCriteria(criteria);
+        List<Link> resultList = findByCriteria(criteria);
 
         Response response;
         Response.ResponseBuilder responseBuilder = Response.noContent();
@@ -149,7 +160,7 @@ public class TopologicalLinkFacadeREST {
     }
 
     @GET
-    @ApiOperation(value = "Retrieve a topological link by ID", notes = "Retrieves a specific topological by ID.", response = TopologicalLink.class)
+    @ApiOperation(value = "Retrieve a topological link by ID", notes = "Retrieves a specific topological by ID.", response = Link.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 404, message = "Not found"),
@@ -164,7 +175,7 @@ public class TopologicalLinkFacadeREST {
         // fields to filter view
         Set<String> fieldSet = FacadeRestUtil.getFieldSet(info.getQueryParameters());
 
-        TopologicalLink p = manager.find(id);
+        Link p = manager.find(id);
         Response response;
         // if troubleTicket exists
         if (p != null) {
@@ -184,7 +195,7 @@ public class TopologicalLinkFacadeREST {
     }
 
     @PATCH
-    @ApiOperation(value = "Modify a topological link", notes = "Modify the specified topological link.", response = TopologicalLink.class, httpMethod = "PATCH")
+    @ApiOperation(value = "Modify a topological link", notes = "Modify the specified topological link.", response = Link.class, httpMethod = "PATCH")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
@@ -195,7 +206,7 @@ public class TopologicalLinkFacadeREST {
     public Response jsonPatch(@ApiParam(value = "TPE ID", required = true) @PathParam("id") String id,
             @ApiParam(value = "The JSON Patch spec of the mofidications to be made.", required = true) JsonPatch jsonPatch) {
         Response response = null;
-        TopologicalLink entity = manager.find(id);
+        Link entity = manager.find(id);
         if (entity != null) {
             // 200
             manager.edit(entity);
@@ -208,7 +219,7 @@ public class TopologicalLinkFacadeREST {
     }
 
     @PATCH
-    @ApiOperation(value = "Modify a topological link", notes = "Modify the specified topological link.", response = TopologicalLink.class, httpMethod = "PATCH")
+    @ApiOperation(value = "Modify a topological link", notes = "Modify the specified topological link.", response = Link.class, httpMethod = "PATCH")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 500, message = "Internal Server Error")
@@ -217,9 +228,9 @@ public class TopologicalLinkFacadeREST {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response patch(@ApiParam(value = "T", required = true) @PathParam("id") String id,
-            @ApiParam(value = "The atributes of the object that need changed.", required = true) TopologicalLink topologicalLink) {
+            @ApiParam(value = "The atributes of the object that need changed.", required = true) Link topologicalLink) {
         Response response = null;
-        TopologicalLink entity = manager.find(id);
+        Link entity = manager.find(id);
         if (entity != null) {
             // 200
             manager.edit(entity);
@@ -267,7 +278,7 @@ public class TopologicalLinkFacadeREST {
     public Response createGraph(@ApiParam(value = "Topological Link ID", required = true) @PathParam("id") String id,
             @ApiParam(value = "The definition of the graph to be created.", required = true) GraphTask graphTask) {
         Response response = null;
-        TopologicalLink p = manager.find(id);
+        Link p = manager.find(id);
         if (p == null) {
             response = Response.status(404).build();
         } else {
@@ -339,7 +350,7 @@ public class TopologicalLinkFacadeREST {
         // search criteria
         MultivaluedMap<String, String> criteria = info.getQueryParameters();
 
-        List<TopologicalLink> resultList = findByCriteria(criteria);
+        List<Link> resultList = findByCriteria(criteria);
 
         Response response;
         Response.ResponseBuilder responseBuilder = Response.noContent();
@@ -354,10 +365,10 @@ public class TopologicalLinkFacadeREST {
         return response;
     }
 
-    private List<TopologicalLink> findByCriteria(MultivaluedMap<String, String> criteria) throws BadUsageException {
-        List<TopologicalLink> resultList = null;
+    private List<Link> findByCriteria(MultivaluedMap<String, String> criteria) throws BadUsageException {
+        List<Link> resultList = null;
         if (criteria != null && !criteria.isEmpty()) {
-            resultList = manager.findByCriteria(criteria, TopologicalLink.class);
+            resultList = manager.findByCriteria(criteria, Link.class);
         } else {
             resultList = manager.findAll();
         }
