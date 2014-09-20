@@ -1,8 +1,7 @@
-{  
-    "alias": [
-        {
-            "name": "CLI name",
-            "value": "tpe22938"
-        }
-    ]
+{
+    "name": "",
+    "type": "",
+    "resourceCharacteristic": [],
+    "isEquipmentProtected": false,
+    "tpeType": ""
 }

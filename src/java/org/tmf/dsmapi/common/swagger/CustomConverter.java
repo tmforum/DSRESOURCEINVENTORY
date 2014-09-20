@@ -16,20 +16,22 @@ import scala.Option;
  * @author jmorey
  */
 public class CustomConverter extends SwaggerSchemaConverter {
-    
+
     @Override
-    public Option<Model> read(Class<?> cls, Map <String, String> typeMap) {
-        Option<Model> mod =  super.read(cls, typeMap);
-        Model old = mod.get();
+    public Option<Model> read(Class<?> cls, Map<String, String> typeMap) {
+        Option<Model> mod = super.read(cls, typeMap);
+        if (!mod.isEmpty()) {
+            Model old = mod.get();
+            LinkedHashMap<String, ModelProperty> props = old.properties();
+            props = (LinkedHashMap<String, ModelProperty>) props.$minus("_persistence_shouldRefreshFetchGroup");
+            Model m = new Model(old.id(), old.name(), old.qualifiedType(), props, old.description(), old.baseModel(), old.discriminator(), old.subTypes());
+            Option<Model> nopt = Option.apply(m);
+            return nopt;
+        } else {
+            return mod;
+        }
 
-        LinkedHashMap<String,ModelProperty> props = old.properties();
-        props = (LinkedHashMap<String, ModelProperty>) props.$minus("_persistence_shouldRefreshFetchGroup");
-
-        Model m = new Model(old.id(),old.name(), old.qualifiedType(),props,old.description(), old.baseModel(),old.discriminator(),old.subTypes());
-        Option<Model> nopt = Option.apply(m);
-        return nopt;
     }
-
 }
 
 

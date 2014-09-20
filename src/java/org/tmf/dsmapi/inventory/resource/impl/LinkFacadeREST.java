@@ -124,7 +124,7 @@ public class LinkFacadeREST {
         //jmentity.setId(null);
         manager.create(entity);
         entity.setHref(uriInfo.getAbsolutePath().toString() + "/" + entity.getId());
-        //jmentity.setId(entity.getId());
+        entity.setId(entity.getId());
         Response response = Response.ok(entity).build();
         return response;
     }

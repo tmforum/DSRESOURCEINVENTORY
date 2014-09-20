@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tmf.dsmapi.common.impl;
+package org.tmf.dsmapi.common.swagger;
 
 import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.config.ScannerFactory;
@@ -30,7 +30,7 @@ public class SwaggerJaxrsConfig extends HttpServlet {
             swaggerConfig.setApiVersion("1.0.0");
             ScannerFactory.setScanner(new DefaultJaxrsScanner());
             ClassReaders.setReader(new DefaultJaxrsApiReader());
-            //ModelConverters.addConverter(new CustomConverter(), true);
+            ModelConverters.addConverter(new CustomConverter(), true);
         } catch (ServletException e) {
             System.out.println(e.getMessage());
         }

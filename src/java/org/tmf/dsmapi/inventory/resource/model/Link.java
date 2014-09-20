@@ -22,7 +22,7 @@ import org.tmf.dsmapi.common.model.Href;
  * @author jmorey
  */
 @Entity
-@DiscriminatorValue("topologicalLink")
+@DiscriminatorValue("link")
 @XmlRootElement
 //@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 //@JsonTypeName("topologicalLink")
@@ -35,8 +35,6 @@ public class Link extends LogicalResource {
     private Href[] tp;
     private String asap;
 
-    //private Direction direction;
-
     /**
      * @return the layerProtocalName
      */
@@ -48,16 +46,8 @@ public class Link extends LogicalResource {
      * @param layerProtocalName the layerProtocalName to set
      */
     public void setLayerProtocalName(String[] layerProtocalName) {
-        this.setLayerProtocalName(layerProtocalName);
+        this.layerProtocalName = layerProtocalName;
     }
-
-    /**
-     * @return the tpe
-     */
-    public Href[] getTp() {
-        return tp;
-    }
-
 
     /**
      * @return the direction
@@ -88,6 +78,20 @@ public class Link extends LogicalResource {
     }
 
     /**
+     * @return the tp
+     */
+    public Href[] getTp() {
+        return tp;
+    }
+
+    /**
+     * @param tp the tp to set
+     */
+    public void setTp(Href[] tp) {
+        this.tp = tp;
+    }
+
+    /**
      * @return the asap
      */
     public String getAsap() {
@@ -101,10 +105,4 @@ public class Link extends LogicalResource {
         this.asap = asap;
     }
 
-    /**
-     * @param tp the tp to set
-     */
-    public void setTp(Href[] tp) {
-        this.tp = tp;
-    }
 }
