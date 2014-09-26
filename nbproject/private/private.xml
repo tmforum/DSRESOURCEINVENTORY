@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/Assoication.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/AssoicationAndRole.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/ExplicitNameValuePair.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/Graph.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/GraphTask.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/Href.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/common/model/JsonPatch.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/inventory/resource/model/Equipment.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/inventory/resource/model/Link.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/inventory/resource/impl/TpeFacade.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/java/org/tmf/dsmapi/inventory/resource/impl/TpeFacadeREST.java</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/conf/persistence.xml</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/src/conf/MANIFEST.MF</file>
+        <file>file:/C:/Users/jmorey/Documents/NetBeansProjects/DSResourceInventory/web/WEB-INF/beans.xml</file>
+    </open-files>
 </project-private>
